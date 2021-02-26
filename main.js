@@ -16,8 +16,14 @@ window.onload = function () {
     let posX = 350;
     let posY = 250;
 
-    const canvas = document.createElement('canvas');
+    let canvasWidth = 900;
+    let canvasHeight = 600;
 
+    const blockSize = 30;
+
+    let snakee;
+
+    const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
     init();
@@ -34,11 +40,13 @@ window.onload = function () {
         via la fonction .appenChild('ELEMENT A ACCROCHER'). Pour cet exemple, on l'accroche au Body, mais
         on aurait pu l'accrocher à un autre élément. Sans ça, notre canvas ne serait relié à aucun élément
         du document HTML, et donc, ne s'afficherait pas ! */
-
-        canvas.width = 900;
-        canvas.height = 600;
+        
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
         canvas.style.border = "1px solid black";
         document.body.appendChild(canvas);
+
+        snakee = new snake([[6,4], [5,4], [4,4]])
 
         refreshCanvas();
     }
@@ -53,11 +61,29 @@ window.onload = function () {
         positionnement axe X - positionnement axe Y - Largeur en px - hauteur en px 
     
         */
-        posX += 2;
-        posY += 2;
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "red";
-        ctx.fillRect(posX, posY, 100, 50);
+        ctx.clearRect(0,0,canvasWidth,canvasHeight);
+        snakee.draw();
         setTimeout(refreshCanvas, delay);
+    }
+
+    function drawBlock(ctx, position) 
+    {
+        var x = position[0] * blockSize;
+        var y = position[1] * blockSize;
+        ctx.fillRect(x, y, blockSize, blockSize)
+    }
+
+    function snake(body)
+    {
+        this.body = body;
+        this.draw = function()
+        {
+            ctx.save();
+            ctx.fillStyle = 'red';
+            for (var i = 0; i<this.body.length; i++) {
+                drawBlock(ctx, this.body[i]);
+            };
+            ctx.restore();
+        }
     }
 }
