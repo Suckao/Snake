@@ -59,5 +59,6 @@ window.onload = function () {
         ctx.fillStyle = "red";
         ctx.fillRect(posX, posY, 100, 50);
         setTimeout(refreshCanvas, delay);
+        console.log('coucou');
     }
 }
