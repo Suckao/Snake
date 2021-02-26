@@ -13,18 +13,16 @@ window.onload = function () {
     pour "rafraichir" le canvas et donner un mouvement à notre élément */
     let delay = 100;
 
-    let posX = 350;
-    let posY = 250;
+    let snakee;
 
-    let canvasWidth = 900;
-    let canvasHeight = 600;
+    const canvasWidth = 900;
+    const canvasHeight = 600;
 
     const blockSize = 30;
 
-    let snakee;
-
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
+    let mouveSpeed = 100
 
     init();
     //Fonction d'initialisation du projet. Elle se lance au début
@@ -46,7 +44,7 @@ window.onload = function () {
         canvas.style.border = "1px solid black";
         document.body.appendChild(canvas);
 
-        snakee = new snake([[6,4], [5,4], [4,4]])
+        snakee = new snake([[6,4], [5,4], [4,4]], mouveSpeed)
 
         refreshCanvas();
     }
@@ -63,6 +61,8 @@ window.onload = function () {
         */
         ctx.clearRect(0,0,canvasWidth,canvasHeight);
         snakee.draw();
+        snakee.move();
+        mouveSpeed +=10;
         setTimeout(refreshCanvas, delay);
     }
 
@@ -70,18 +70,34 @@ window.onload = function () {
     {
         var x = position[0] * blockSize;
         var y = position[1] * blockSize;
-        ctx.fillRect(x, y, blockSize, blockSize)
+        ctx.fillRect(x, y, 30, 30)
     }
 
-    function snake(body)
+    function advanced(ctx, position, mouveSpeed)
+    {
+        let x = position[0] * blockSize + mouveSpeed;
+        let y = position[1] * blockSize;
+        console.log(x);
+        ctx.fillRect(x,y,blockSize,blockSize);
+    }
+
+    function snake(body, mouveSPeed)
     {
         this.body = body;
         this.draw = function()
         {
             ctx.save();
             ctx.fillStyle = 'red';
-            for (var i = 0; i<this.body.length; i++) {
+            for (let i = 0; i < this.body.length; i++) {
                 drawBlock(ctx, this.body[i]);
+            };
+            ctx.restore();
+        }
+        this.move = function()
+        {
+            ctx.save();
+            for(let i = 0; i < this.body.length; i++) {
+                advanced(ctx, this.body[i], mouveSPeed);
             };
             ctx.restore();
         }
