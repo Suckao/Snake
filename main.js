@@ -62,7 +62,8 @@ window.onload = function () {
         ctx.clearRect(0,0,canvasWidth,canvasHeight);
         snakee.draw();
         snakee.move();
-        mouveSpeed +=10;
+
+        
         setTimeout(refreshCanvas, delay);
     }
 
